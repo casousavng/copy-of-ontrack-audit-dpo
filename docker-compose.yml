@@ -25,6 +25,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-}
     container_name: ontrack-app
     restart: unless-stopped
     depends_on:

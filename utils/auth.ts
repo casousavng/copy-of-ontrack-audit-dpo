@@ -8,7 +8,7 @@ export const getCurrentUser = () => {
 
 export const hasRole = (role: UserRole): boolean => {
   const user = getCurrentUser();
-  if (!user || !user.roles) return false;
+  if (!user || !user.roles || !Array.isArray(user.roles)) return false;
   return user.roles.includes(role);
 };
 

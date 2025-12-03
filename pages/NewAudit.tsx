@@ -25,48 +25,54 @@ export const NewAudit: React.FC = () => {
   const [error, setError] = useState('');
   
   useEffect(() => {
-    if (!canCreateAudit()) {
-      navigate('/dashboard');
-      return;
-    }
+    const load = async () => {
+      if (!canCreateAudit()) {
+        navigate('/dashboard');
+        return;
+      }
 
-    const currentUser = getCurrentUser();
-    // DOT só vê lojas atribuídas
-    // AMONT e ADMIN veem todas
-    const user = db.getUserByEmail(currentUser?.email || '');
-    if (user?.roles.includes('DOT' as any)) {
-      const dotStores = db.getStoresForDOT(user.id);
-      setAvailableStores(dotStores);
-    } else {
-      setAvailableStores(db.getStores());
-    }
+      const currentUser = getCurrentUser();
+      const email = currentUser?.email || '';
+      const user = await db.getUserByEmail(email);
+
+      if (user && Array.isArray(user.roles) && user.roles.includes('DOT' as any)) {
+        const dotStores = await db.getStoresForDOT(user.id);
+        setAvailableStores(dotStores);
+      } else {
+        const stores = await db.getStores();
+        setAvailableStores(stores);
+      }
+    };
+    load();
   }, [navigate]);
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
       if(!selectedStore) return;
 
       const currentUser = getCurrentUser();
-      
-      // Verificar se DOT pode criar auditoria para esta loja
-      const user = db.getUserByEmail(currentUser?.email || '');
-      if (user?.roles.includes('DOT' as any)) {
-        if (!db.canDOTCreateAuditForStore(user.id, parseInt(selectedStore))) {
+      const email = currentUser?.email || '';
+      const user = await db.getUserByEmail(email);
+
+      // Verificar se DOT pode criar auditoria para esta loja (tem de ser uma das lojas atribuídas)
+      if (user && Array.isArray(user.roles) && user.roles.includes('DOT' as any)) {
+        const allowed = availableStores.some(s => s.id === parseInt(selectedStore));
+        if (!allowed) {
           setError('Não tem permissão para criar auditorias nesta loja.');
           return;
         }
       }
 
-      const checklist = db.getChecklist();
+      const checklist = await db.getChecklist();
+      const checklistId = checklist?.id || 1;
       
-      const newAudit = db.createAudit({
+        const newAudit = await db.createAudit({
           user_id: currentUser?.userId || 0,
           store_id: parseInt(selectedStore),
-          checklist_id: checklist.id,
+          checklist_id: checklistId,
           dtstart: new Date(date).toISOString(),
-          status: AuditStatus.NEW,
-          aderentes: attendees,
-          score: undefined,
-          createdBy: currentUser?.userId || 0, // Marca como criado pelo DOT (ele próprio)
+          // DB expects string status enum; use 'SCHEDULED' for new audits
+          status: 'SCHEDULED',
+          createdBy: currentUser?.userId || 0,
       });
 
       navigate(`/dot/audit/${newAudit.id}`);

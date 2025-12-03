@@ -12,8 +12,12 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build frontend
-RUN npm run build
+# Accept build arg for API URL (empty = use relative URLs)
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
+
+# Build frontend in production mode
+RUN npm run build -- --mode production
 
 # Production stage
 FROM node:20-alpine

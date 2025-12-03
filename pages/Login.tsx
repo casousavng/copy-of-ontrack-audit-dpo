@@ -20,21 +20,24 @@ export const Login: React.FC = () => {
     try {
       const { user } = await api.login(loginEmail, loginPassword);
       
+      // Ensure roles is an array
+      const userRoles = Array.isArray(user.roles) ? user.roles : [];
+      
       const authData = { 
         token: '123', 
         email: user.email,
         userId: user.id,
         name: user.fullname,
-        roles: user.roles 
+        roles: userRoles
       };
       localStorage.setItem('ontrack_auth', JSON.stringify(authData));
       
       // Redirect based on role (prioridade: ADMIN > AMONT > ADERENTE > DOT)
-      if (user.roles.includes(UserRole.ADMIN)) {
+      if (userRoles.includes(UserRole.ADMIN)) {
         navigate('/admin/dashboard');
-      } else if (user.roles.includes(UserRole.AMONT)) {
+      } else if (userRoles.includes(UserRole.AMONT)) {
         navigate('/amont/dashboard');
-      } else if (user.roles.includes(UserRole.ADERENTE)) {
+      } else if (userRoles.includes(UserRole.ADERENTE)) {
         navigate('/aderente/dashboard');
       } else {
         navigate('/dashboard');
@@ -75,7 +78,10 @@ export const Login: React.FC = () => {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => handleLogin(undefined, 'admin@mousquetaires.com')}
+                onClick={() => {
+                  setEmail('admin@mousquetaires.com');
+                  setPassword('admin');
+                }}
                 className="w-full justify-start"
               >
                 ⚙️ Admin
@@ -84,7 +90,10 @@ export const Login: React.FC = () => {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => handleLogin(undefined, 'amont@mousquetaires.com')}
+                onClick={() => {
+                  setEmail('amont@mousquetaires.com');
+                  setPassword('amont');
+                }}
                 className="w-full justify-start"
               >
                 👔 Amont
@@ -93,7 +102,10 @@ export const Login: React.FC = () => {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => handleLogin(undefined, 'dot1@mousquetaires.com')}
+                onClick={() => {
+                  setEmail('dot1@mousquetaires.com');
+                  setPassword('dot1');
+                }}
                 className="w-full justify-start"
               >
                 👨‍💼 DOT
@@ -102,7 +114,10 @@ export const Login: React.FC = () => {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => handleLogin(undefined, 'aderente1@intermarche.pt')}
+                onClick={() => {
+                  setEmail('aderente1@intermarche.pt');
+                  setPassword('aderente1');
+                }}
                 className="w-full justify-start"
               >
                 🏪 Aderente

@@ -1,4 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// Use relative URLs in production (works with tunnels/proxies)
+// In development, use localhost explicitly
+const API_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:3001/api');
 // Derive server root (without /api) for legacy endpoints
 const SERVER_URL = API_URL.replace(/\/api$/, '');
 

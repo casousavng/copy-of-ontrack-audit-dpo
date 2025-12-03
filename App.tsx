@@ -43,8 +43,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requireRole?: () => 
 const App: React.FC = () => {
     return (
         <ToastProvider>
-        <Router>
-      <Routes>
+                <Router>
+            <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
@@ -169,15 +169,15 @@ const App: React.FC = () => {
                 <Reports />
             </ProtectedRoute>
         } />
-      </Routes>
-            <Routes>
-                <Route path="/admin/dashboard" element={
-                        <ProtectedRoute requireRole={canAccessAdminDashboard}>
-                                <AdminDashboard />
-                        </ProtectedRoute>
-                } />
+        <Route path="/admin/dashboard" element={
+            <ProtectedRoute requireRole={canAccessAdminDashboard}>
+                <AdminDashboard />
+            </ProtectedRoute>
+        } />
+                {/* Fallback for unknown routes */}
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-        </Router>
+                </Router>
         </ToastProvider>
   );
 };
