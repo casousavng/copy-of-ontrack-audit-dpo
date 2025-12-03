@@ -1,0 +1,7 @@
+{
+  "name": "Copy of OnTrack Audit DPO",
+  "description": "A comprehensive auditing tool for Intermarché stores allowing DPO teams to conduct, manage, and analyze quality audits.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

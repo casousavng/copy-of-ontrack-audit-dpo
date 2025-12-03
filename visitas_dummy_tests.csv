@@ -1,0 +1,21 @@
+tipo;titulo;texto;data;dot_email;lojas
+Auditoria;Auditoria Qualidade Q1;Auditoria trimestral de qualidade e segurança alimentar;15/01/2026;dot1@mousquetaires.com;LOJ001
+Formacao;Formação HACCP;Sessão de formação sobre normas HACCP e controlo de temperatura;20/01/2026;dot1@mousquetaires.com;LOJ001,LOJ002
+Acompanhamento;Acompanhamento Pós-Auditoria;Follow-up de ações corretivas da última auditoria;25/01/2026;dot1@mousquetaires.com;LOJ002
+Outros;Visita Protocolar;Visita de cortesia e apresentação de novos produtos;30/01/2026;dot1@mousquetaires.com;LOJ003
+Auditoria;Auditoria Qualidade Q1;Auditoria trimestral de qualidade e segurança alimentar;05/02/2026;dot2@mousquetaires.com;LOJ004
+Formacao;Formação Segurança Trabalho;Formação sobre equipamentos de proteção individual;10/02/2026;dot2@mousquetaires.com;LOJ004,LOJ005
+Acompanhamento;Acompanhamento Melhorias;Verificação de implementação de melhorias sugeridas;15/02/2026;dot2@mousquetaires.com;LOJ005
+Outros;Reunião Estratégica;Reunião de planeamento estratégico com gerência;20/02/2026;dot2@mousquetaires.com;LOJ006
+Auditoria;Auditoria Limpeza;Auditoria específica de limpeza e higienização;01/03/2026;dot3@mousquetaires.com;LOJ007
+Formacao;Formação Atendimento Cliente;Workshop sobre excelência no atendimento ao cliente;05/03/2026;dot3@mousquetaires.com;LOJ007
+Acompanhamento;Acompanhamento Formação;Verificação de aplicação prática dos conhecimentos adquiridos;10/03/2026;dot3@mousquetaires.com;LOJ008
+Outros;Visita Técnica;Avaliação técnica de equipamentos e infraestrutura;15/03/2026;dot3@mousquetaires.com;LOJ008
+Auditoria;Auditoria Completa Q1;Auditoria completa de todas as áreas operacionais;20/03/2026;dot4@mousquetaires.com;LOJ009
+Formacao;Formação Gestão Stock;Formação sobre gestão eficiente de stocks e inventário;25/03/2026;dot4@mousquetaires.com;LOJ009,LOJ010
+Acompanhamento;Acompanhamento Boas Práticas;Verificação de cumprimento de boas práticas operacionais;01/04/2026;dot4@mousquetaires.com;LOJ010
+Outros;Sessão Esclarecimento;Sessão de esclarecimento sobre novas políticas internas;05/04/2026;dot4@mousquetaires.com;LOJ009
+Auditoria;Auditoria Merchandising;Auditoria de merchandising e exposição de produtos;10/04/2026;dot1@mousquetaires.com;LOJ003
+Formacao;Formação Sustentabilidade;Formação sobre práticas sustentáveis e redução de desperdício;15/04/2026;dot2@mousquetaires.com;LOJ006
+Acompanhamento;Acompanhamento Merchandising;Follow-up de implementação de planogramas;20/04/2026;dot3@mousquetaires.com;LOJ007
+Outros;Visita Surpresa;Visita não agendada para avaliação espontânea;25/04/2026;dot4@mousquetaires.com;LOJ010

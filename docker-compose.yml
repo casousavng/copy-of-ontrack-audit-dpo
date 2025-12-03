@@ -1,0 +1,48 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ontrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ontrack_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ontrack_password}
+      POSTGRES_DB: ${POSTGRES_DB:-ontrack_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./server/db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ontrack_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # OnTrack Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ontrack-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-ontrack_user}:${POSTGRES_PASSWORD:-ontrack_password}@postgres:5432/${POSTGRES_DB:-ontrack_db}
+      PORT: 3001
+      NODE_ENV: production
+    ports:
+      - "3001:3001"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
+    driver: local
