@@ -19,10 +19,31 @@ class ApiClient {
   }
 
   // Auth
-  async login(email: string) {
+  async login(email: string, password?: string) {
     return this.request('/auth/login', {
       method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+  }
+
+  async forgotPassword(email: string) {
+    return this.request('/auth/forgot-password', {
+      method: 'POST',
       body: JSON.stringify({ email }),
+    });
+  }
+
+  async verifyResetToken(token: string) {
+    return this.request('/auth/verify-reset-token', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
+  }
+
+  async resetPassword(token: string, password: string) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, password }),
     });
   }
 

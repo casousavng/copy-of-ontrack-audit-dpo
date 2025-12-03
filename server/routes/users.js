@@ -1,7 +1,9 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
 import { query } from '../db/index.js';
 
 const router = express.Router();
+const SALT_ROUNDS = 10;
 
 // Helper to convert PostgreSQL array format to JS array
 const parseRoles = (pgRoles) => {
@@ -57,13 +59,19 @@ router.get('/:id', async (req, res) => {
 // Create user
 router.post('/', async (req, res) => {
   try {
-    const { email, fullname, roles, amontId, assignedStores } = req.body;
+    const { email, fullname, roles, amontId, assignedStores, password } = req.body;
+    
+    // Se password fornecida, fazer hash
+    let passwordHash = null;
+    if (password) {
+      passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    }
     
     const result = await query(
-      `INSERT INTO users (email, fullname, roles, amont_id, assigned_stores) 
-       VALUES ($1, $2, $3, $4, $5) 
+      `INSERT INTO users (email, fullname, roles, amont_id, assigned_stores, password_hash) 
+       VALUES ($1, $2, $3, $4, $5, $6) 
        RETURNING id, email, fullname, roles, amont_id, assigned_stores`,
-      [email, fullname, roles || ['ADERENTE'], amontId || null, assignedStores || []]
+      [email, fullname, roles || ['ADERENTE'], amontId || null, assignedStores || [], passwordHash]
     );
     
     res.status(201).json(formatUser(result.rows[0]));
@@ -79,7 +87,13 @@ router.post('/', async (req, res) => {
 // Update user
 router.put('/:id', async (req, res) => {
   try {
-    const { email, fullname, roles, amontId, assignedStores } = req.body;
+    const { email, fullname, roles, amontId, assignedStores, password } = req.body;
+    
+    // Se password fornecida, fazer hash
+    let passwordHash = undefined;
+    if (password) {
+      passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    }
     
     const result = await query(
       `UPDATE users 
@@ -87,17 +101,18 @@ router.put('/:id', async (req, res) => {
            fullname = COALESCE($2, fullname),
            roles = COALESCE($3, roles),
            amont_id = $4,
-           assigned_stores = COALESCE($5, assigned_stores)
-       WHERE id = $6
+           assigned_stores = COALESCE($5, assigned_stores),
+           password_hash = COALESCE($6, password_hash)
+       WHERE id = $7
        RETURNING id, email, fullname, roles, amont_id, assigned_stores`,
-      [email, fullname, roles, amontId, assignedStores, req.params.id]
+      [email, fullname, roles, amontId, assignedStores, passwordHash, req.params.id]
     );
     
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    res.json(result.rows[0]);
+    res.json(formatUser(result.rows[0]));
   } catch (error) {
     console.error('Update user error:', error);
     res.status(500).json({ error: 'Failed to update user' });

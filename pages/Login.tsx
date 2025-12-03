@@ -15,9 +15,10 @@ export const Login: React.FC = () => {
   const handleLogin = async (e?: React.FormEvent, quickEmail?: string) => {
     if (e) e.preventDefault();
     const loginEmail = quickEmail || email;
+    const loginPassword = quickEmail ? undefined : password; // Acesso rápido não usa password
     
     try {
-      const { user } = await api.login(loginEmail);
+      const { user } = await api.login(loginEmail, loginPassword);
       
       const authData = { 
         token: '123', 
@@ -39,7 +40,7 @@ export const Login: React.FC = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      setError('Utilizador não encontrado ou erro de conexão!');
+      setError('Email ou password incorretos!');
       console.error('Login error:', error);
     }
   };
@@ -119,41 +120,22 @@ export const Login: React.FC = () => {
           </div>
 
           <form className="space-y-6" onSubmit={handleLogin}>
-            
-            <Button 
-                type="button" 
-                variant="danger" 
-                fullWidth 
-                className="bg-[#F25022] hover:bg-[#d0401b]"
-                onClick={handleLogin} // Shortcut for demo
-            >
-                LOG IN WITH OFFICE 365
-            </Button>
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  Log in with your email and password:
-                </span>
-              </div>
-            </div>
-
             <Input
-              label="Your Email Address"
+              label="Email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={error}
+              placeholder="seu.email@mousquetaires.com"
+              required
             />
 
             <Input
-              label="Your Password"
+              label="Password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
 
             <div className="flex items-center justify-between">
@@ -165,23 +147,24 @@ export const Login: React.FC = () => {
                   className="h-4 w-4 text-mousquetaires focus:ring-mousquetaires border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Keep me signed in
+                  Manter sessão iniciada
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-                  I Forgot My Password
-                </a>
+                <button
+                  type="button"
+                  onClick={() => navigate('/forgot-password')}
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Esqueci a password
+                </button>
               </div>
             </div>
 
-            <div className="flex gap-4 items-center">
-                <button type="button" className="text-sm font-medium text-teal-700 hover:text-teal-900">Sign up</button>
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-700 ml-auto px-8">
-                LOG IN
-                </Button>
-            </div>
+            <Button type="submit" fullWidth className="bg-blue-600 hover:bg-blue-700">
+              ENTRAR
+            </Button>
           </form>
         </div>
       </div>

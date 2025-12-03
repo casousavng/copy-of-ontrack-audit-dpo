@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MessageSquare, Send } from 'lucide-react';
-import { db } from '../../services/mockDb';
+import { db } from '../../services/dbAdapter';
 import { AuditComment } from '../../types';
 import { getCurrentUser } from '../../utils/auth';
 import { isDOT } from '../../utils/permissions';
