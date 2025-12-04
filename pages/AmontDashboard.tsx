@@ -85,11 +85,15 @@ export const AmontDashboard: React.FC = () => {
     if (searchTerm) {
       filtered = filtered.filter(v => {
         const titleMatch = 'title' in v && v.title?.toLowerCase().includes(searchTerm.toLowerCase());
+        // Find the DOT user for this store
+        const dotUser = v.store.dotUserId ? users.find(u => u.id === v.store.dotUserId) : null;
+        const dotNameMatch = dotUser && dotUser.fullname?.toLowerCase().includes(searchTerm.toLowerCase());
         return (
           v.store.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
           v.store.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
           v.store.codehex.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          titleMatch
+          titleMatch ||
+          dotNameMatch
         );
       });
     }
@@ -451,16 +455,6 @@ export const AmontDashboard: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">Dashboard Amont</h1>
             <p className="text-gray-500">Supervisão e análise de todas as visitas</p>
           </div>
-          <div className="flex gap-3">
-            <Button onClick={() => navigate('/amont/import-visitas')} size="md">
-              <Upload className="w-4 h-4 mr-2" />
-              Importar Visitas
-            </Button>
-            <Button onClick={() => navigate('/amont/reports')} size="md">
-              <BarChart3 className="w-4 h-4 mr-2" />
-              Relatórios
-            </Button>
-          </div>
         </div>
 
         {/* Stats Cards */}
@@ -526,7 +520,7 @@ export const AmontDashboard: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   type="text"
-                  placeholder="Pesquisar loja, cidade, código..."
+                  placeholder="Pesquisar loja, cidade, código, DOT..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -572,15 +566,6 @@ export const AmontDashboard: React.FC = () => {
                   <option key={brand} value={brand}>{brand}</option>
                 ))}
               </select>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/amont/reports')}
-              >
-                <BarChart3 size={16} className="mr-2" />
-                Relatórios
-              </Button>
             </div>
           </div>
         </div>
@@ -664,7 +649,7 @@ export const AmontDashboard: React.FC = () => {
             </div>
 
             {(() => {
-              // Map unified visits to planner-friendly audits shape
+              // Map unified visits to planner-friendly audits shape, keeping visitType
               const plannerAudits = filteredVisits.map(v => ({
                 id: v.id as number,
                 user_id: 0,
@@ -672,21 +657,32 @@ export const AmontDashboard: React.FC = () => {
                 checklist_id: 0,
                 dtstart: v.dtstart,
                 status: v.status,
-                store: v.store
-              })) as unknown as (Audit & { store: Store })[];
+                store: v.store,
+                visitType: v.visitType // Keep the visit type for navigation
+              })) as unknown as (Audit & { store: Store; visitType?: VisitType })[];
+
+              // Handler that navigates to audit or visit based on type
+              const handleItemClick = (id: number) => {
+                const item = filteredVisits.find(v => v.id === id);
+                if (item?.visitType === VisitType.AUDITORIA) {
+                  navigate(`/amont/audit/${id}`);
+                } else {
+                  navigate(`/amont/visit/${id}`);
+                }
+              };
 
               return calendarScope === 'month' ? (
                 <MonthPlanner
                   audits={plannerAudits}
-                  onAuditClick={(id) => navigate(`/amont/audit/${id}`)}
-                  onDateClick={(date) => navigate('/select-visit-type', { state: { selectedDate: date.toISOString() } })}
+                  onAuditClick={handleItemClick}
+                  onDateClick={(date) => navigate('/amont/select-new-visit', { state: { selectedDate: date.toISOString() } })}
                   onShowWeek={(date) => { setWeekFocusDate(date); setCalendarScope('week'); }}
                 />
               ) : (
                 <WeekPlanner
                   audits={plannerAudits}
-                  onAuditClick={(id) => navigate(`/amont/audit/${id}`)}
-                  onDateClick={(date) => navigate('/select-visit-type', { state: { selectedDate: date.toISOString() } })}
+                  onAuditClick={handleItemClick}
+                  onDateClick={(date) => navigate('/amont/select-new-visit', { state: { selectedDate: date.toISOString() } })}
                   initialDate={weekFocusDate}
                 />
               );

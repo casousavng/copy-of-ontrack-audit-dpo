@@ -1,138 +1,138 @@
 pagina admin
-- remover os links redudnates que aparecem na lateral ao abrir o menu (onde tem o nome do user e o sair)
-- nessa aba so fica o botao sair
+- sem todos por agora
 
 pagina amount
-- os botoes no dashboard (importar visitas e relatorios) desaparecem ja que estao presente na barra lateral
-- o import de visitas tem de validar se estao a duplicadr os dados ou seja, o mesmo tipo de visita, para o mesmo dot, para a mesma loja, para a mesma data, se ja exisitr nao faz a importação e informa o amont disso mesmo
-- a clicar num agendamento feito pelo amont (talvez via csv) e associado a um DOT nao consigo ver recebo pagina em branco com estes erros na consola:
-    index-DZvZ1via.js:60  GET http://localhost:3001/api/audits/15 net::ERR_INTERNET_DISCONNECTED
-request @ index-DZvZ1via.js:60
-getAuditById @ index-DZvZ1via.js:60
-getAuditById @ index-DZvZ1via.js:305
-(anonymous) @ index-DZvZ1via.js:305
-jn @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-df @ index-DZvZ1via.js:48
-(anonymous) @ index-DZvZ1via.js:48
-je @ index-DZvZ1via.js:17
-index-DZvZ1via.js:60  GET http://localhost:3001/api/stores net::ERR_INTERNET_DISCONNECTED
-request @ index-DZvZ1via.js:60
-getStores @ index-DZvZ1via.js:60
-getStores @ index-DZvZ1via.js:305
-(anonymous) @ index-DZvZ1via.js:305
-jn @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-df @ index-DZvZ1via.js:48
-(anonymous) @ index-DZvZ1via.js:48
-je @ index-DZvZ1via.js:17
-index-DZvZ1via.js:60  Uncaught (in promise) TypeError: Failed to fetch
-    at Py.request (index-DZvZ1via.js:60:23990)
-    at Py.getStores (index-DZvZ1via.js:60:25069)
-    at bb.getStores (index-DZvZ1via.js:305:20342)
-    at index-DZvZ1via.js:305:152622
-    at jn (index-DZvZ1via.js:48:92823)
-    at Gm (index-DZvZ1via.js:48:108067)
-    at Ta (index-DZvZ1via.js:48:107951)
-    at Gm (index-DZvZ1via.js:48:108047)
-    at Ta (index-DZvZ1via.js:48:107951)
-    at Gm (index-DZvZ1via.js:48:108833)
-request @ index-DZvZ1via.js:60
-getStores @ index-DZvZ1via.js:60
-getStores @ index-DZvZ1via.js:305
-(anonymous) @ index-DZvZ1via.js:305
-jn @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-Ta @ index-DZvZ1via.js:48
-Gm @ index-DZvZ1via.js:48
-df @ index-DZvZ1via.js:48
-(anonymous) @ index-DZvZ1via.js:48
-je @ index-DZvZ1via.js:17
-:3001/favicon.ico:1  GET http://localhost:3001/favicon.ico net::ERR_INTERNET_DISCONNECTED
+- a clicar num agendamento do tipo Auditorio no calendario feito pelo amont (talvez via csv) e associado a um DOT nao consigo ver recebo pagina em branco com estes erros na consola:
+    GET http://localhost:3001/favicon.ico net::ERR_INTERNET_DISCONNECTED
+index-az-_NypN.js:60  GET http://localhost:3001/api/visits net::ERR_INTERNET_DISCONNECTED
+request @ index-az-_NypN.js:60
+getVisits @ index-az-_NypN.js:60
+getVisits @ index-az-_NypN.js:305
+(anonymous) @ index-az-_NypN.js:312
+(anonymous) @ index-az-_NypN.js:312
+jn @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+df @ index-az-_NypN.js:48
+(anonymous) @ index-az-_NypN.js:48
+he @ index-az-_NypN.js:17
+index-az-_NypN.js:60  Uncaught (in promise) TypeError: Failed to fetch
+    at ty.request (index-az-_NypN.js:60:23990)
+    at ty.getVisits (index-az-_NypN.js:60:25941)
+    at bb.getVisits (index-az-_NypN.js:305:24459)
+    at index-az-_NypN.js:312:20506
+    at index-az-_NypN.js:312:20689
+    at jn (index-az-_NypN.js:48:92835)
+    at Vm (index-az-_NypN.js:48:108079)
+    at Da (index-az-_NypN.js:48:107963)
+    at Vm (index-az-_NypN.js:48:108059)
+    at Da (index-az-_NypN.js:48:107963)
+request @ index-az-_NypN.js:60
+getVisits @ index-az-_NypN.js:60
+getVisits @ index-az-_NypN.js:305
+(anonymous) @ index-az-_NypN.js:312
+(anonymous) @ index-az-_NypN.js:312
+jn @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+df @ index-az-_NypN.js:48
+(anonymous) @ index-az-_NypN.js:48
+he @ index-az-_NypN.js:17
 
 
-
-- a pesquisa por DOT nao aparece ou seja tenho um alista vazia como se nao tivesse DOTS associados ao amont
-- podemos substituir o botao Importa Visitas por Visita Amont e o Relatorios por Visita DOT
-- Botao visita amont permite o amont fazer uma visita passando pelo tipo de visita e seguir fazendo o que tiver de ser (tem os mesmos parametros do DOT)
-- Botao visita do dot permite ao amount criar manualmente no calendario uma visita para um dot especifico a uma loja especifica com um tipo de visita especifica
-- Podemos organizar estes dois botoes como fizemos paar o DOT como PLANO DE VISITAS
-- Atualmente ao criar uma visita clicamos no + do calendario mas ao escolher o tipo de visita as lojas nao aparecem, o Amount pode ser todas as lojas e todos os dots a si associados
+- a pesquisa por DOT deve aparecer o link para os detalhes da visita
+- continuo sem conseguir criar visitas manuais pelos botoes com o login de Amount.
+  clico no + escoolho o tipo preencho os campos e no botao criar nao faz nada e recebo isto na consola:
+  index-az-_NypN.js:312 Erro ao criar visita: Error: Failed to create visit
+    at ty.request (index-az-_NypN.js:60:24150)
+    at async ae (index-az-_NypN.js:312:10920)
 
 pagina DOT
-- separador as minhas lojas deve estar retraido e so mostra lojas quando clicado
-- quando selecionamos uma visita (diferente de auditoria) nao temos a listagem de lojas associadas ao DOT ou seja esta em branco
-- o botoes inferiores da pagina devem desaparecer passando para a barra lateral do utilizador, assim ficam ocultos quando necessario
+- acontece o mesmo erro que acontece ao Amount ao adicionar a visita de qualquer tipo ao calendario. nao da e da o mesm erro na consola
+- link lateral indicadores, nao encaminha para nada a nao ser o dashboard e recebo isto:
+
+    at Vm (index-az-_NypN.js:48:108059)
+request @ index-az-_NypN.js:60
+getUsers @ index-az-_NypN.js:60
+getUsers @ index-az-_NypN.js:305
+getUserByEmail @ index-az-_NypN.js:305
+(anonymous) @ index-az-_NypN.js:305
+(anonymous) @ index-az-_NypN.js:305
+jn @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+Da @ index-az-_NypN.js:48
+Vm @ index-az-_NypN.js:48
+df @ index-az-_NypN.js:48
+(anonymous) @ index-az-_NypN.js:48
+he @ index-az-_NypN.js:17
 
 pagina aderente
 - ao criar nova visita nao temos checklist disponivel, criar uma do mesmo estilo (mas nao pode ser a mesma) que criamos para o DOT

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Button } from '../components/ui/Button';
-import { CheckCircle, Clock, AlertCircle, FileText, List, MapPin } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, FileText, List, MapPin, Filter } from 'lucide-react';
 import { db } from '../services/dbAdapter';
 import { Audit, AuditStatus, Store, ActionPlan, ActionStatus } from '../types';
 import { getCurrentUser } from '../utils/auth';
@@ -13,6 +13,8 @@ export const AderenteDashboard: React.FC = () => {
   const [myVisits, setMyVisits] = useState<(Audit & { store: Store })[]>([]); // Visitas criadas pelo Aderente
   const [allActions, setAllActions] = useState<ActionPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [aderenteStores, setAderenteStores] = useState<Store[]>([]); // Lojas do Aderente
+  const [selectedStoreFilter, setSelectedStoreFilter] = useState<number | 'all'>('all');
 
   useEffect(() => {
     const loadData = async () => {
@@ -24,36 +26,44 @@ export const AderenteDashboard: React.FC = () => {
 
       const stores = await db.getStores();
       
-      // Encontrar a loja do Aderente (relação 1:1)
-      const aderenteStore = stores.find(s => s.aderenteId === currentUser.userId);
+      // Encontrar TODAS as lojas do Aderente (pode ter múltiplas)
+      const myStores = stores.filter(s => s.aderenteId === currentUser.userId);
+      setAderenteStores(myStores);
       
-      if (!aderenteStore) {
+      if (myStores.length === 0) {
         console.warn('Aderente não tem loja atribuída');
         setLoading(false);
         return;
       }
 
+      // IDs das lojas do Aderente
+      const myStoreIds = myStores.map(s => s.id);
+
       // Carregar TODAS as auditorias (não filtrar por userId)
       const allAudits = await db.getAudits(1); // userId não importa, retorna todas
       
-      // Filtrar auditorias da loja do Aderente que foram submetidas
+      // Filtrar auditorias das lojas do Aderente que foram submetidas
       const enriched = allAudits
-        .filter(a => a.store_id === aderenteStore.id && a.status >= AuditStatus.SUBMITTED)
-        .map(a => ({
-          ...a,
-          store: aderenteStore
-        }));
+        .filter(a => myStoreIds.includes(a.store_id) && a.status >= AuditStatus.SUBMITTED)
+        .map(a => {
+          const auditStore = myStores.find(s => s.id === a.store_id);
+          return {
+            ...a,
+            store: auditStore!
+          };
+        })
+        .filter(a => a.store); // Garantir que tem store
 
       setAudits(enriched);
 
       // Filtrar visitas criadas pelo próprio Aderente (a outras lojas)
       const myCreatedVisits = allAudits
-        .filter(a => a.createdBy === currentUser.userId && a.store_id !== aderenteStore.id)
+        .filter(a => a.createdBy === currentUser.userId && !myStoreIds.includes(a.store_id))
         .map(a => {
           const visitStore = stores.find(s => s.id === a.store_id);
           return {
             ...a,
-            store: visitStore || aderenteStore // fallback
+            store: visitStore || myStores[0] // fallback
           };
         });
 
@@ -72,6 +82,19 @@ export const AderenteDashboard: React.FC = () => {
     loadData();
   }, []);
 
+  // Auditorias filtradas por loja
+  const filteredAudits = useMemo(() => {
+    if (selectedStoreFilter === 'all') return audits;
+    return audits.filter(a => a.store_id === selectedStoreFilter);
+  }, [audits, selectedStoreFilter]);
+
+  // Ações filtradas por loja
+  const filteredActions = useMemo(() => {
+    if (selectedStoreFilter === 'all') return allActions;
+    const filteredAuditIds = filteredAudits.map(a => a.id);
+    return allActions.filter(action => filteredAuditIds.includes(action.audit_id));
+  }, [allActions, selectedStoreFilter, filteredAudits]);
+
   const getStatusBadge = (status: AuditStatus) => {
     switch(status) {
       case AuditStatus.SUBMITTED:
@@ -83,7 +106,7 @@ export const AderenteDashboard: React.FC = () => {
     }
   };
 
-  const myActions = allActions.filter(a => 
+  const myActions = filteredActions.filter(a => 
     a.responsible === 'Aderente' || a.responsible === 'Ambos'
   );
   const pendingActions = myActions.filter(a => a.status === ActionStatus.PENDING);
@@ -112,21 +135,43 @@ export const AderenteDashboard: React.FC = () => {
           </Button>
         </div>
 
+        {/* Filtro por Loja (apenas se tiver mais de uma loja) */}
+        {aderenteStores.length > 1 && (
+          <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div className="flex items-center gap-3">
+              <Filter className="text-gray-500" size={20} />
+              <label className="text-sm font-medium text-gray-700">Filtrar por Loja:</label>
+              <select
+                value={selectedStoreFilter}
+                onChange={(e) => setSelectedStoreFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                className="flex-1 max-w-md px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mousquetaires focus:border-mousquetaires"
+              >
+                <option value="all">Todas as Lojas ({aderenteStores.length})</option>
+                {aderenteStores.map(store => (
+                  <option key={store.id} value={store.id}>
+                    {store.city} - {store.codehex} ({store.brand})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <button 
             type="button"
             onClick={() => {
-              if (audits.length > 0) {
-                navigate(`/aderente/audit/${audits[0].id}`);
+              if (filteredAudits.length > 0) {
+                navigate(`/aderente/audit/${filteredAudits[0].id}`);
               }
             }}
-            disabled={audits.length === 0}
+            disabled={filteredAudits.length === 0}
             className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow text-left disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-gray-900">{audits.length}</div>
+                <div className="text-2xl font-bold text-gray-900">{filteredAudits.length}</div>
                 <div className="text-sm text-gray-500">Visitas Recebidas</div>
               </div>
               <FileText className="text-gray-400" size={32} />
@@ -184,10 +229,10 @@ export const AderenteDashboard: React.FC = () => {
           <div className="divide-y divide-gray-100">
             {loading ? (
               <p className="p-4 text-gray-500">A carregar...</p>
-            ) : audits.length === 0 ? (
+            ) : filteredAudits.length === 0 ? (
               <p className="p-4 text-gray-500">Nenhuma visita recebida ainda.</p>
             ) : (
-              audits.slice(0, 5).map(audit => (
+              filteredAudits.slice(0, 5).map(audit => (
                 <div
                   key={audit.id}
                   className="p-4 hover:bg-gray-50 transition-colors"
@@ -336,7 +381,7 @@ export const AderenteDashboard: React.FC = () => {
               <p className="p-4 text-gray-500">Nenhuma ação atribuída.</p>
             ) : (
               myActions.slice(0, 5).map(action => {
-                const audit = audits.find(a => a.id === action.audit_id);
+                const audit = filteredAudits.find(a => a.id === action.audit_id);
                 const isOverdue =
                   new Date(action.dueDate) < new Date() &&
                   action.status !== ActionStatus.COMPLETED;

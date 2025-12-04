@@ -41,7 +41,7 @@ INSERT INTO stores (id, codehex, brand, size, city, gpslat, gpslong, dot_user_id
 (9, 'LOJ009', 'Intermarché', 'Hyper', 'Setúbal', 38.52, -8.89, 6, 19),
 (10, 'LOJ010', 'Intermarché', 'Super', 'Guarda', 40.54, -7.27, 6, 20);
 
--- Insert Checklist
+-- Insert Checklists
 INSERT INTO checklists (id, name, target_role, sections) VALUES
 (1, 'Auditoria Qualidade 2025', 'DOT', 
 '[
@@ -98,6 +98,73 @@ INSERT INTO checklists (id, name, target_role, sections) VALUES
       }
     ]
   }
+]'::jsonb),
+(2, 'Visita Aderente - Avaliação Cruzada', 'ADERENTE', 
+'[
+  {
+    "id": 201,
+    "name": "Atendimento ao Cliente",
+    "orderindex": 1,
+    "items": [
+      {
+        "id": 2101,
+        "name": "Qualidade do Atendimento",
+        "criteria": [
+          {"id": 21001, "name": "Colaboradores disponíveis e simpáticos", "weight": 1},
+          {"id": 21002, "name": "Tempo de espera adequado nas caixas", "weight": 1},
+          {"id": 21003, "name": "Respostas claras às dúvidas dos clientes", "weight": 1}
+        ]
+      },
+      {
+        "id": 2102,
+        "name": "Serviço Personalizado",
+        "criteria": [
+          {"id": 21004, "name": "Secções assistidas bem atendidas (talho, charcutaria, peixaria)", "weight": 2},
+          {"id": 21005, "name": "Colaboradores com conhecimento dos produtos", "weight": 1}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 202,
+    "name": "Apresentação da Loja",
+    "orderindex": 2,
+    "items": [
+      {
+        "id": 2201,
+        "name": "Organização Geral",
+        "criteria": [
+          {"id": 22001, "name": "Corredores livres e organizados", "weight": 1},
+          {"id": 22002, "name": "Sinalética clara e visível", "weight": 1},
+          {"id": 22003, "name": "Promoções bem destacadas", "weight": 1}
+        ]
+      },
+      {
+        "id": 2202,
+        "name": "Ambiente",
+        "criteria": [
+          {"id": 22004, "name": "Iluminação adequada", "weight": 1},
+          {"id": 22005, "name": "Ambiente agradável (música, climatização)", "weight": 1}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 203,
+    "name": "Boas Práticas",
+    "orderindex": 3,
+    "items": [
+      {
+        "id": 2301,
+        "name": "Práticas Diferenciadas",
+        "criteria": [
+          {"id": 23001, "name": "Identificação de boas práticas a replicar", "weight": 2},
+          {"id": 23002, "name": "Inovações no ponto de venda", "weight": 1},
+          {"id": 23003, "name": "Práticas sustentáveis visíveis", "weight": 1}
+        ]
+      }
+    ]
+  }
 ]'::jsonb);
 
 -- Insert Sample Audits
@@ -114,6 +181,6 @@ INSERT INTO visits (id, store_id, user_id, type, title, description, dtstart, st
 -- Reset sequences
 SELECT setval('users_id_seq', 20, true);
 SELECT setval('stores_id_seq', 10, true);
-SELECT setval('checklists_id_seq', 1, true);
+SELECT setval('checklists_id_seq', 2, true);
 SELECT setval('audits_id_seq', 3, true);
 SELECT setval('visits_id_seq', 2, true);

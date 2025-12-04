@@ -168,11 +168,11 @@ export const VisitDetail: React.FC = () => {
             </div>
 
             {/* Description/Text */}
-            {visit.text && (
+            {(visit.description || visit.text) && (
               <div className="border-t border-gray-200 pt-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Descrição</h3>
                 <div className="prose max-w-none">
-                  <p className="text-gray-700 whitespace-pre-wrap">{visit.text}</p>
+                  <p className="text-gray-700 whitespace-pre-wrap">{visit.description || visit.text}</p>
                 </div>
               </div>
             )}

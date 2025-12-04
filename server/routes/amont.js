@@ -105,6 +105,26 @@ router.post('/import-visitas', upload.single('file'), async (req, res) => {
           }
           const storeId = storeRes.rows[0].id;
 
+          // Check for duplicates: same type, DOT, store, date
+          const dtDate = new Date(dtstart);
+          const startOfDay = new Date(dtDate.getFullYear(), dtDate.getMonth(), dtDate.getDate()).toISOString();
+          const endOfDay = new Date(dtDate.getFullYear(), dtDate.getMonth(), dtDate.getDate() + 1).toISOString();
+          
+          const duplicateCheck = await query(
+            `SELECT id FROM visits 
+             WHERE store_id = $1 AND user_id = $2 AND type = $3 
+             AND dtstart >= $4 AND dtstart < $5`,
+            [storeId, userId, tipo, startOfDay, endOfDay]
+          );
+          
+          if (duplicateCheck.rows.length > 0) {
+            results.errors.push({ 
+              line: r.__line, 
+              message: `Duplicado: já existe ${tipoRaw} para DOT ${dotEmail} na loja ${code} em ${dataStr}` 
+            });
+            continue;
+          }
+
           const ins = await query(
             `INSERT INTO visits (store_id, user_id, type, title, description, dtstart, status, created_by)
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8)

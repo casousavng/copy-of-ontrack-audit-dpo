@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MessageSquare, Send } from 'lucide-react';
 import { db } from '../../services/dbAdapter';
-import { AuditComment } from '../../types';
+import { AuditComment, UserRole } from '../../types';
 import { getCurrentUser } from '../../utils/auth';
 import { isDOT } from '../../utils/permissions';
 import { Button } from '../ui/Button';
@@ -40,13 +40,13 @@ export const CommentThread: React.FC<CommentThreadProps> = ({ auditId }) => {
     // Get the correct role from user's roles array
     // Check against the actual UserRole enum values
     let userRole = 'Aderente';
-    if (user.roles.some(r => r === 'Amont' || r === 'AMONT')) {
+    if (user.roles.some(r => r === UserRole.AMONT)) {
       userRole = 'AMONT';
-    } else if (user.roles.some(r => r === 'DOT')) {
+    } else if (user.roles.some(r => r === UserRole.DOT)) {
       userRole = 'DOT';
-    } else if (user.roles.some(r => r === 'Admin' || r === 'ADMIN')) {
+    } else if (user.roles.some(r => r === UserRole.ADMIN)) {
       userRole = 'ADMIN';
-    } else if (user.roles.some(r => r === 'Aderente' || r === 'ADERENTE')) {
+    } else if (user.roles.some(r => r === UserRole.ADERENTE)) {
       userRole = 'Aderente';
     }
 

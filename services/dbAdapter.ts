@@ -60,17 +60,27 @@ class DatabaseAdapter {
 
   // ============ STORES ============
   async getStores(): Promise<Store[]> {
-    return api.getStores();
+    const stores = await api.getStores();
+    // Normalize snake_case to camelCase
+    return stores.map((s: any) => ({
+      ...s,
+      dotUserId: s.dot_user_id,
+      aderenteId: s.aderente_id
+    }));
   }
 
   async getStoreById(id: number): Promise<Store | undefined> {
-    const stores = await api.getStores();
+    const stores = await this.getStores();
     return stores.find((s: Store) => s.id === id);
   }
 
   async getStoresForDOT(dotUserId: number): Promise<Store[]> {
-    const stores = await api.getStores();
-    return stores.filter((s: Store) => s.dot_user_id === dotUserId);
+    const stores = await this.getStores();
+    // Convert to number for comparison to handle string IDs from localStorage
+    const userId = Number(dotUserId);
+    return stores.filter((s: Store) => 
+      Number(s.dotUserId) === userId || Number(s.dot_user_id) === userId
+    );
   }
 
   async createStore(storeData: Partial<Store>): Promise<Store> {
@@ -122,10 +132,32 @@ class DatabaseAdapter {
     });
   }
 
-  async updateAudit(audit: Audit): Promise<void> {
+  async updateAudit(auditOrId: Audit | number, partialData?: Partial<Audit>): Promise<void> {
+    let id: number;
+    let status: AuditStatus;
+    let dtend: string | undefined;
+    let final_score: number | undefined;
+    let auditorcomments: string | undefined;
+
+    if (typeof auditOrId === 'number') {
+      // Called with (id, partialData)
+      id = auditOrId;
+      status = partialData?.status ?? AuditStatus.NEW;
+      dtend = partialData?.dtend;
+      final_score = partialData?.final_score;
+      auditorcomments = partialData?.auditorcomments;
+    } else {
+      // Called with (audit)
+      id = auditOrId.id;
+      status = auditOrId.status;
+      dtend = auditOrId.dtend;
+      final_score = auditOrId.final_score;
+      auditorcomments = auditOrId.auditorcomments;
+    }
+
     let statusStr = 'SCHEDULED';
     // Map numeric enum to string enum for DB
-    switch (audit.status) {
+    switch (status) {
       case AuditStatus.NEW: statusStr = 'SCHEDULED'; break;
       case AuditStatus.IN_PROGRESS: statusStr = 'IN_PROGRESS'; break;
       case AuditStatus.SUBMITTED: statusStr = 'COMPLETED'; break;
@@ -135,10 +167,11 @@ class DatabaseAdapter {
       default: statusStr = 'SCHEDULED';
     }
 
-    await api.updateAudit(audit.id, {
+    await api.updateAudit(id, {
       status: statusStr,
-      dtend: audit.dtend,
-      finalScore: audit.final_score
+      dtend,
+      finalScore: final_score,
+      auditorcomments
     });
   }
 
@@ -190,13 +223,13 @@ class DatabaseAdapter {
     return api.getScores(auditId);
   }
 
-  async saveScore(score: Partial<AuditScore>): Promise<void> {
+  async saveScore(score: Partial<AuditScore> & { photo_url?: string }): Promise<void> {
     await api.saveScore({
       auditId: score.audit_id,
       criteriaId: score.criteria_id,
       score: score.score,
       comment: score.comment,
-      photoUrl: score.photo_url
+      photoUrl: (score as any).photo_url || (score as any).photoUrl
     });
   }
 
@@ -205,15 +238,15 @@ class DatabaseAdapter {
     return api.getActions(auditId);
   }
 
-  async createAction(actionData: Partial<ActionPlan>): Promise<ActionPlan> {
+  async createAction(actionData: Partial<ActionPlan> & { audit_id?: number; criteria_id?: number; due_date?: string; created_by?: number }): Promise<ActionPlan> {
     return api.createAction({
-      auditId: actionData.audit_id,
-      criteriaId: actionData.criteria_id,
+      auditId: (actionData as any).audit_id || actionData.audit_id,
+      criteriaId: (actionData as any).criteria_id || actionData.criteria_id,
       title: actionData.title,
       description: actionData.description,
       responsible: actionData.responsible,
-      dueDate: actionData.due_date,
-      createdBy: actionData.created_by
+      dueDate: (actionData as any).due_date || actionData.dueDate,
+      createdBy: (actionData as any).created_by || actionData.createdBy
     });
   }
 
@@ -223,7 +256,7 @@ class DatabaseAdapter {
       description: action.description,
       status: action.status,
       progress: action.progress,
-      completedDate: action.completed_date
+      completedDate: action.completedDate || (action as any).completed_date
     });
   }
 
@@ -236,14 +269,14 @@ class DatabaseAdapter {
     return api.getComments(auditId);
   }
 
-  async createComment(commentData: Partial<AuditComment>): Promise<AuditComment> {
+  async createComment(commentData: Partial<AuditComment> & { audit_id?: number; user_id?: number; is_internal?: boolean }): Promise<AuditComment> {
     return api.createComment({
       auditId: commentData.audit_id,
       userId: commentData.user_id,
       // accept both 'comment' (UI) and 'content' (API) keys
-      content: (commentData as any).comment ?? commentData.content ?? '',
+      content: (commentData as any).comment ?? (commentData as any).content ?? '',
       // accept both 'isInternal' (UI) and 'is_internal' (API) keys
-      isInternal: (commentData as any).isInternal ?? commentData.is_internal ?? false
+      isInternal: (commentData as any).isInternal ?? (commentData as any).is_internal ?? false
     });
   }
 
@@ -251,6 +284,15 @@ class DatabaseAdapter {
   async getChecklist(): Promise<Checklist | null> {
     const checklists = await api.getChecklists();
     return checklists[0] || null;
+  }
+
+  async getChecklists(): Promise<Checklist[]> {
+    const checklists = await api.getChecklists();
+    // Normalize target_role to targetRole for frontend compatibility
+    return checklists.map((c: any) => ({
+      ...c,
+      targetRole: c.target_role || c.targetRole
+    }));
   }
 
   async getChecklistById(id: number): Promise<Checklist | undefined> {
@@ -264,7 +306,7 @@ class DatabaseAdapter {
   // ============ HELPERS ============
   async getDOTsForAmont(amontUserId: number): Promise<User[]> {
     const users = await api.getUsers();
-    return users.filter((u: User) => u.amont_id === amontUserId);
+    return users.filter((u: any) => u.amont_id === amontUserId || u.amontId === amontUserId);
   }
 
   // No-op for compatibility (data now persists in PostgreSQL)

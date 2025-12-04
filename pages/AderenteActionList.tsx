@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Button } from '../components/ui/Button';
-import { CheckCircle, Clock, AlertCircle, ChevronDown } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, ChevronDown, ArrowLeft } from 'lucide-react';
 import { db } from '../services/dbAdapter';
 import { ActionPlan, ActionStatus, Audit, Store } from '../types';
 import { getCurrentUser } from '../utils/auth';
@@ -106,9 +106,18 @@ export const AderenteActionList: React.FC = () => {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Plano de Ação</h1>
-          <p className="text-gray-500">Gerir as suas ações atribuídas</p>
+        <div className="mb-8 flex items-center gap-4">
+          <Button
+            variant="outline"
+            onClick={() => navigate('/aderente/dashboard')}
+          >
+            <ArrowLeft className="mr-2" size={16} />
+            Voltar
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Plano de Ação</h1>
+            <p className="text-gray-500">Gerir as suas ações atribuídas</p>
+          </div>
         </div>
 
         {/* Stats */}

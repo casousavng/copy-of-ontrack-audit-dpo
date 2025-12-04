@@ -20,8 +20,12 @@ import { AmontDashboard } from './pages/AmontDashboard';
 import { AmontAuditView } from './pages/AmontAuditView';
 import { AmontImportCSV } from './pages/AmontImportCSV';
 import { AmontImportTasksCSV } from './pages/AmontImportTasksCSV';
+import { AmontNewVisitAmont } from './pages/AmontNewVisitAmont';
+import { AmontNewVisitDOT } from './pages/AmontNewVisitDOT';
+import { AmontSelectNewVisit } from './pages/AmontSelectNewVisit';
 import { VisitDetail } from './pages/VisitDetail';
 import { Reports } from './pages/Reports';
+import { DOTApproveAderenteVisits } from './pages/DOTApproveAderenteVisits';
 import { getDefaultDashboard, canAccessDOTDashboard, canAccessAderenteDashboard, canAccessAmontDashboard, canViewReports, canAccessAdminDashboard } from './utils/permissions';
 import { AdminDashboard } from './pages/AdminDashboard';
 
@@ -119,6 +123,11 @@ const App: React.FC = () => {
                 <AuditList />
             </ProtectedRoute>
         } />
+        <Route path="/dot/approve-aderente-visits" element={
+            <ProtectedRoute requireRole={canAccessDOTDashboard}>
+                <DOTApproveAderenteVisits />
+            </ProtectedRoute>
+        } />
         <Route path="/aderente/dashboard" element={
             <ProtectedRoute requireRole={canAccessAderenteDashboard}>
                 <AderenteDashboard />
@@ -167,6 +176,21 @@ const App: React.FC = () => {
         <Route path="/amont/reports" element={
             <ProtectedRoute requireRole={canViewReports}>
                 <Reports />
+            </ProtectedRoute>
+        } />
+        <Route path="/amont/new-visit-amont" element={
+            <ProtectedRoute requireRole={canAccessAmontDashboard}>
+                <AmontNewVisitAmont />
+            </ProtectedRoute>
+        } />
+        <Route path="/amont/new-visit-dot" element={
+            <ProtectedRoute requireRole={canAccessAmontDashboard}>
+                <AmontNewVisitDOT />
+            </ProtectedRoute>
+        } />
+        <Route path="/amont/select-new-visit" element={
+            <ProtectedRoute requireRole={canAccessAmontDashboard}>
+                <AmontSelectNewVisit />
             </ProtectedRoute>
         } />
         <Route path="/admin/dashboard" element={

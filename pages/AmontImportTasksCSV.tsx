@@ -102,7 +102,10 @@ export const AmontImportTasksCSV: React.FC = () => {
       setImportResults({ created: result.imported || 0, errors: errors.length });
       setServerErrors(errors);
       setImportSuccess(true);
-      setTimeout(() => navigate('/amont/dashboard'), 2500);
+      // Só redireciona automaticamente se não houver erros
+      if (errors.length === 0) {
+        setTimeout(() => navigate('/amont/dashboard'), 2500);
+      }
     } catch (e: any) {
       console.error('Import error:', e);
       alert(e?.message || 'Falha na importação.');
@@ -176,13 +179,13 @@ export const AmontImportTasksCSV: React.FC = () => {
         )}
 
         {importSuccess && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className={`${serverErrors.length > 0 ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'} border rounded-lg p-4 mb-6`}>
             <div className="flex items-start">
-              <CheckCircle className="w-5 h-5 text-green-600 mr-2 mt-0.5" />
+              <CheckCircle className={`w-5 h-5 ${serverErrors.length > 0 ? 'text-yellow-600' : 'text-green-600'} mr-2 mt-0.5`} />
               <div>
-                <h3 className="font-semibold text-green-900 mb-1">Importação Concluída!</h3>
-                <p className="text-sm text-green-800">{importResults.created} tarefas criadas com sucesso. {importResults.errors > 0 && `${importResults.errors} erros encontrados.`}</p>
-                <p className="text-sm text-green-700 mt-2">A redirecionar para o dashboard...</p>
+                <h3 className={`font-semibold ${serverErrors.length > 0 ? 'text-yellow-900' : 'text-green-900'} mb-1`}>Importação Concluída!</h3>
+                <p className={`text-sm ${serverErrors.length > 0 ? 'text-yellow-800' : 'text-green-800'}`}>{importResults.created} tarefas criadas com sucesso. {importResults.errors > 0 && `${importResults.errors} erros encontrados.`}</p>
+                {serverErrors.length === 0 && <p className="text-sm text-green-700 mt-2">A redirecionar para o dashboard...</p>}
               </div>
             </div>
           </div>
@@ -219,7 +222,9 @@ export const AmontImportTasksCSV: React.FC = () => {
             <FileText className="w-4 h-4 mr-2" />
             {importing ? 'A importar...' : 'Importar Visitas'}
           </Button>
-          <Button onClick={() => navigate('/amont/dashboard')} disabled={importing}>Cancelar</Button>
+          <Button onClick={() => navigate('/amont/dashboard')} disabled={importing}>
+            {importSuccess && serverErrors.length === 0 ? 'Voltar' : (importSuccess && serverErrors.length > 0 ? 'Concluir' : 'Cancelar')}
+          </Button>
         </div>
       </main>
     </div>
