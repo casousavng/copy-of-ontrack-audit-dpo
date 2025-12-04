@@ -1,36 +1,32 @@
 -- Seed Data for OnTrack Application
 
--- NOTA IMPORTANTE:
--- A senha para TODOS os utilizadores abaixo é: 123456
--- O hash utilizado é compatível com bcrypt.
-
 -- Insert Admin User
-INSERT INTO users (id, email, fullname, roles, password_hash) VALUES
-(1, 'admin@mousquetaires.com', 'Carlos Oliveira', ARRAY['ADMIN']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS');
+INSERT INTO users (id, email, fullname, roles) VALUES
+(1, 'admin@mousquetaires.com', 'Carlos Oliveira', ARRAY['ADMIN']::user_role[]);
 
 -- Insert AMONT User
-INSERT INTO users (id, email, fullname, roles, password_hash) VALUES
-(2, 'amont@mousquetaires.com', 'Ana Costa', ARRAY['AMONT']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS');
+INSERT INTO users (id, email, fullname, roles) VALUES
+(2, 'amont@mousquetaires.com', 'Ana Costa', ARRAY['AMONT']::user_role[]);
 
 -- Insert DOT Users
-INSERT INTO users (id, email, fullname, roles, amont_id, assigned_stores, password_hash) VALUES
-(3, 'dot1@mousquetaires.com', 'João Silva', ARRAY['DOT']::user_role[], 2, ARRAY[1,2,3], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(4, 'dot2@mousquetaires.com', 'Pedro Martins', ARRAY['DOT']::user_role[], 2, ARRAY[4,5,6], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(5, 'dot3@mousquetaires.com', 'Sofia Almeida', ARRAY['DOT']::user_role[], 2, ARRAY[7,8], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(6, 'dot4@mousquetaires.com', 'Rui Santos', ARRAY['DOT']::user_role[], 2, ARRAY[9,10], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS');
+INSERT INTO users (id, email, fullname, roles, amont_id, assigned_stores) VALUES
+(3, 'dot1@mousquetaires.com', 'João Silva', ARRAY['DOT']::user_role[], 2, ARRAY[1,2,3]),
+(4, 'dot2@mousquetaires.com', 'Pedro Martins', ARRAY['DOT']::user_role[], 2, ARRAY[4,5,6]),
+(5, 'dot3@mousquetaires.com', 'Sofia Almeida', ARRAY['DOT']::user_role[], 2, ARRAY[7,8]),
+(6, 'dot4@mousquetaires.com', 'Rui Santos', ARRAY['DOT']::user_role[], 2, ARRAY[9,10]);
 
--- Insert Aderente Users 
-INSERT INTO users (id, email, fullname, roles, password_hash) VALUES
-(11, 'aderente1@intermarche.pt', 'Maria Santos', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(12, 'aderente2@intermarche.pt', 'José Oliveira', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(13, 'aderente3@intermarche.pt', 'Teresa Lima', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(14, 'aderente4@intermarche.pt', 'Carlos Nunes', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(15, 'aderente5@intermarche.pt', 'Ana Lopes', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(16, 'aderente6@intermarche.pt', 'Miguel Tavares', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(17, 'aderente7@intermarche.pt', 'Joana Pinto', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(18, 'aderente8@intermarche.pt', 'Bruno Correia', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(19, 'aderente9@intermarche.pt', 'Carla Gomes', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS'),
-(20, 'aderente10@intermarche.pt', 'Vasco Ribeiro', ARRAY['ADERENTE']::user_role[], '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS');
+-- Insert Aderente Users
+INSERT INTO users (id, email, fullname, roles) VALUES
+(11, 'aderente1@intermarche.pt', 'Maria Santos', ARRAY['ADERENTE']::user_role[]),
+(12, 'aderente2@intermarche.pt', 'José Oliveira', ARRAY['ADERENTE']::user_role[]),
+(13, 'aderente3@intermarche.pt', 'Teresa Lima', ARRAY['ADERENTE']::user_role[]),
+(14, 'aderente4@intermarche.pt', 'Carlos Nunes', ARRAY['ADERENTE']::user_role[]),
+(15, 'aderente5@intermarche.pt', 'Ana Lopes', ARRAY['ADERENTE']::user_role[]),
+(16, 'aderente6@intermarche.pt', 'Miguel Tavares', ARRAY['ADERENTE']::user_role[]),
+(17, 'aderente7@intermarche.pt', 'Joana Pinto', ARRAY['ADERENTE']::user_role[]),
+(18, 'aderente8@intermarche.pt', 'Bruno Correia', ARRAY['ADERENTE']::user_role[]),
+(19, 'aderente9@intermarche.pt', 'Carla Gomes', ARRAY['ADERENTE']::user_role[]),
+(20, 'aderente10@intermarche.pt', 'Vasco Ribeiro', ARRAY['ADERENTE']::user_role[]);
 
 -- Insert Stores
 INSERT INTO stores (id, codehex, brand, size, city, gpslat, gpslong, dot_user_id, aderente_id) VALUES

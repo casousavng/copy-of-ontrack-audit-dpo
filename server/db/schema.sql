@@ -170,7 +170,7 @@ CREATE TRIGGER update_visits_updated_at BEFORE UPDATE ON visits
 CREATE TRIGGER update_action_plans_updated_at BEFORE UPDATE ON action_plans
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- ADMIN user
-INSERT INTO users (id, email, fullname, roles) VALUES
-(1, 'admin@intermarche.pt', 'Master Administrator', ARRAY['ADMIN']::user_role[]);
-UPDATE users SET password_hash = '$2b$10$YQ5P5yJ5p5YQ5P5yJ5p5YeKGxJ5sJ5Q5P5yJ5p5YQ5P5yJ5p5Y' WHERE email = 'admin@intermarche.pt';
+-- ADMIN user seed with password '123456'
+--INSERT INTO users (id, email, fullname, roles) VALUES
+--(1, 'admin@intermarche.pt', 'Master Administrator', ARRAY['ADMIN']::user_role[]);
+--UPDATE users SET password_hash = '$2b$10$EoAOkNbEtoxIapQZIJK/guxAiyf7UBeawr7SRAyU9vnVEGntNxQhS' WHERE email = 'admin@intermarche.pt';

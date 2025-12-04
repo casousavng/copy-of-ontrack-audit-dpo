@@ -15,10 +15,10 @@ dist
 dist-ssr
 
 # Environment variables
-.env
-.env.local
-.env.production
-.env.development
+#.env
+#.env.local
+#.env.production
+#.env.development
 
 # Editor directories and files
 .vscode/*
@@ -35,8 +35,8 @@ dist-ssr
 docker-compose.override.yml
 
 # Database
-*.db
-*.sqlite
+.db
+.sqlite
 
 # macOS
 .DS_Store
